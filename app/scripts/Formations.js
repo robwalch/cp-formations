@@ -92,7 +92,7 @@
 
 		var pos = v.mult(vector, 0.5);
 		var perp = v.normalize(v.perp(vector)).mult(spacing);
-		pos.sub(v.mult(perp, Math.floor(length/2)));
+		pos.sub(v.mult(perp, (length-1)/2));
 
 		var pi = Math.PI;
 		var angle = (v.toangle(vector) + pi) % (2*pi);
