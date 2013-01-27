@@ -97,6 +97,18 @@
 		var pi = Math.PI;
 		var angle = (v.toangle(vector) + pi) % (2*pi);
 
+		//invalidate hungarian algorithm solution
+		// this could be better. units colliding with each other could be a good trigger.
+		var solution = this.solution;
+		if (solution) {
+			var lastPerp = this.positions[1].sub(this.positions[0]);
+			var distSq = v.lengthsq(v.sub(lastPerp, perp));
+			if (distSq > 4000) {
+				//console.log(distSq);
+				this.solution = null;
+			}
+		}
+
 		// populate positions, compare body positions to formation and assign based on distance
 		var positions = this.getFormationVectors(length);
 		for (var i=0; i<length; i++) {
@@ -182,19 +194,8 @@
 		length = length || positionLen;
 		var bodies = this.getUnits(length);
 
-		//quick test to see if we need to reindex positions
-		var testIndex = 0;
-		var bPos = bodies[testIndex].getPos();
-		var distanceSq = v.lengthsq(v.sub(bPos, positions[testIndex]));
-		for (var j=1; j<positionLen; j++) {
-			if (v.lengthsq(v.sub(bPos, positions[j])) < distanceSq) {
-				this.solution = null;
-				break;
-			}
-		}
-
-		var HG = window.Hungarian;
 		var solution = this.solution;
+		var HG = window.Hungarian;
 		if (!solution) {
 			solution = this.solution = HG.hungarianAlgortithm(positions, bodies);
 			console.log(solution.join(','));
