@@ -87,7 +87,6 @@
 		var distance = v.len(vector);
 		if (distance < 64) {
 			vector.y = 64;
-			distance = 64;
 		}
 
 		var pos = v.mult(vector, 0.5);
